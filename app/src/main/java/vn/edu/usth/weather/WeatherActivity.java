@@ -14,7 +14,13 @@ public class WeatherActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+//        EdgeToEdge.enable(this);
+        setContentView(R.layout.activity_main);
 
+        // Create a new Fragment to be placed in the activity layout
+        ForecastFragment f = new ForecastFragment();
+        // Add the fragment to the 'container' FrameLayout
+        getSupportFragmentManager().beginTransaction().add(R.id.container, f).commit();
 
         Log.i("create" , "onCreate called");
     }
