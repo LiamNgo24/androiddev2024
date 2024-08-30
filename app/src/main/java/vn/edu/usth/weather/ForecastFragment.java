@@ -6,9 +6,13 @@ import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
 
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -57,14 +61,45 @@ public class ForecastFragment extends Fragment {
         }
     }
 
-    @SuppressLint("Range")
+//    @SuppressLint("Range")
+//    @Override
+//    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+//                             Bundle savedInstanceState) {
+//        View view = inflater.inflate(R.layout.fragment_forecast, container, false);
+//        // Inflate the layout for this fragment
+//        view.setBackgroundColor(Color.parseColor("#6f7566"));
+//        return view;
+//
+//    }
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_forecast, container, false);
-        // Inflate the layout for this fragment
+        View view = inflater.inflate(R.layout.fragment_forecast, container, false); // DO NOT delete / comment this out
         view.setBackgroundColor(Color.parseColor("#6f7566"));
-        return view;
 
+        LinearLayout layout = new LinearLayout(getActivity());
+        layout.setOrientation(LinearLayout.VERTICAL);
+        layout.setGravity(Gravity.CENTER);
+
+        TextView textView = new TextView(getActivity());
+        textView.setText("Today");
+        textView.setTextSize(24);
+
+        ImageView imageView = new ImageView(getActivity());
+        imageView.setImageResource(R.drawable.few_clouds_day);
+        LinearLayout.LayoutParams imageParams = new LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.WRAP_CONTENT,
+                LinearLayout.LayoutParams.WRAP_CONTENT
+        );
+        imageParams.setMargins(0, 20, 0, 0);
+        imageView.setLayoutParams(imageParams);
+
+        layout.addView(textView);
+        layout.addView(imageView);
+
+        ((ViewGroup) view).addView(layout);
+
+        return view;
     }
 }
