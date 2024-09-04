@@ -15,7 +15,7 @@ public class SecondFragment extends Fragment {
 
     private FragmentSecondBinding binding;
 
-    @Override
+//    @Override
     public View onCreateView(
             @NonNull LayoutInflater inflater, ViewGroup container,
             Bundle savedInstanceState
