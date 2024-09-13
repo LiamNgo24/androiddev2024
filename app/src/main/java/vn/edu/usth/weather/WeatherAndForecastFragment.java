@@ -3,17 +3,20 @@ package vn.edu.usth.weather;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
+import androidx.fragment.app.FragmentManager;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+
 /**
  * A simple {@link Fragment} subclass.
- * Use the {@link WeatherFragment#newInstance} factory method to
+ * Use the {@link WeatherAndForecastFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class WeatherFragment extends Fragment {
+public class WeatherAndForecastFragment extends Fragment {
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -24,7 +27,7 @@ public class WeatherFragment extends Fragment {
     private String mParam1;
     private String mParam2;
 
-    public WeatherFragment() {
+    public WeatherAndForecastFragment() {
         // Required empty public constructor
     }
 
@@ -34,11 +37,11 @@ public class WeatherFragment extends Fragment {
      *
      * @param param1 Parameter 1.
      * @param param2 Parameter 2.
-     * @return A new instance of fragment WeatherFragment.
+     * @return A new instance of fragment WeatherAndForecastFragment.
      */
     // TODO: Rename and change types and number of parameters
-    public static WeatherFragment newInstance(String param1, String param2) {
-        WeatherFragment fragment = new WeatherFragment();
+    public static WeatherAndForecastFragment newInstance(String param1, String param2) {
+        WeatherAndForecastFragment fragment = new WeatherAndForecastFragment();
         Bundle args = new Bundle();
         args.putString(ARG_PARAM1, param1);
         args.putString(ARG_PARAM2, param2);
@@ -53,12 +56,25 @@ public class WeatherFragment extends Fragment {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
+
+
     }
 
-//    @Override
+    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+
+        ForecastFragment forecastFragment = new ForecastFragment();
+        WeatherFragment weatherFragment = new WeatherFragment();
+
+        FragmentTransaction ft = getChildFragmentManager().beginTransaction();
+
+        ft.add(R.id.container1, weatherFragment, "weatherFragment");
+        ft.add(R.id.container2, forecastFragment, "forcastFragment");
+
+        ft.commit();
+
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_weather, container, false);
+        return inflater.inflate(R.layout.fragment_weather_and_forecast, container, false);
     }
 }

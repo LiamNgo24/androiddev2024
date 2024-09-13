@@ -2,25 +2,47 @@ package vn.edu.usth.weather;
 
 import android.os.Bundle;
 import android.util.Log;
+import android.widget.LinearLayout;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
+import androidx.viewpager.widget.PagerAdapter;
+import androidx.viewpager.widget.ViewPager;
+import androidx.viewpager2.widget.ViewPager2;
 
 public class WeatherActivity extends AppCompatActivity {
 
-//    @Override
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-//        EdgeToEdge.enable(this);
-        setContentView(R.layout.activity_main);
+        EdgeToEdge.enable(this);
 
-        // Create a new Fragment to be placed in the activity layout
-        ForecastFragment f = new ForecastFragment();
-        // Add the fragment to the 'container' FrameLayout
-        getSupportFragmentManager().beginTransaction().add(R.id.container, f).commit();
+        setContentView(R.layout.activity_weather);
+
+        ViewPager2 pager = findViewById(R.id.pager);
+        pager.setOffscreenPageLimit(3);
+        HomeFragmentPagerAdapter adapter = new HomeFragmentPagerAdapter(this);
+
+        pager.setAdapter(adapter);
+
+
+//        getSupportFragmentManager().beginTransaction()
+//                .add(R.id.container, weatherFragment)
+//                .add(R.id.container, forecastFragment)
+//                .commit();
+//
+//        getSupportFragmentManager().beginTransaction()
+//                .add(R.id.container, forecastFragment)
+//                .commit();
+
+        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
+            Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
+            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
+            return insets;
+        });
 
         Log.i("create" , "onCreate called");
     }
@@ -57,5 +79,6 @@ public class WeatherActivity extends AppCompatActivity {
 
         Log.i("Destroy" , "onDestroy called");
     }
+
 
 }

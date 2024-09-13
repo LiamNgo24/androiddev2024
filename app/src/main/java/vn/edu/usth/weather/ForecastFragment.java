@@ -72,7 +72,7 @@ public class ForecastFragment extends Fragment {
 //
 //    }
 
-    @Override
+//    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup weatherFragment,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_forecast, weatherFragment, false); // DO NOT delete / comment this out
