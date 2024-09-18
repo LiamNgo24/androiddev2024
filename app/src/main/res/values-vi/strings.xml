@@ -1,11 +1,7 @@
 <resources>
-    <string name="app_name">USTH Weather</string>
-    <string name="action_settings">Settings</string>
+
     <!-- Strings used for fragments for navigation -->
-    <string name="first_fragment_label">First Fragment</string>
-    <string name="second_fragment_label">Second Fragment</string>
-    <string name="next">Next</string>
-    <string name="previous">Previous</string>
+
 
     <string name="lorem_ipsum">
         Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam in scelerisque sem. Mauris
@@ -47,24 +43,27 @@
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="dummy_button">Dummy Button</string>
     <string name="dummy_content">DUMMY\nCONTENT</string>
-    <string name="hanoi_vietnam">Hanoi, Vietnam</string>
-    <string name="paris_france" translatable="false">Paris, France</string>
-    <string name="toulose_france" translatable="false">Toulose, France</string>
-    <string name="usth_weather">Usth Weather</string>
-    <string name="monday">Monday</string>
-    <string name="partly_cloudy">Partly cloudy</string>
-    <string name="temp">Temp</string>
-    <string name="mostly_cloudy">Mostly cloudy</string>
-    <string name="sunny">Sunny</string>
-    <string name="windy">Windy</string>
-    <string name="raining">Raining</string>
-    <string name="heavy_rain">Heavy rain</string>
-    <string name="tuesday">Tuesday</string>
-    <string name="wednesday">Wednesday</string>
-    <string name="thursday">Thursday</string>
-    <string name="friday">Friday</string>
-    <string name="saturday">Saturday</string>
-    <string name="sunday">Sunday</string>
-    <string name="_12c" translatable="false">12C</string>
-    <string name="hanoi">Hanoi</string>
+    <string name="app_name">Thời tiết USTH</string>
+    <string name="action_settings">Tùy chỉnh</string>
+    <string name="first_fragment_label">lorem ipsum</string>
+    <string name="second_fragment_label">lorem ipsum</string>
+    <string name="next">Chuyển tiếp</string>
+    <string name="previous">Quay lại</string>
+    <string name="hanoi_vietnam">Hà Nội, Việt Nam</string>
+    <string name="usth_weather">Thời tiết USTH</string>
+    <string name="monday">Thứ 2</string>
+    <string name="partly_cloudy">Hơi mây</string>
+    <string name="temp">Nhiệt dộ</string>
+    <string name="mostly_cloudy">Nhiều mây</string>
+    <string name="sunny">Có nắng</string>
+    <string name="windy">Có gió</string>
+    <string name="raining">Mưa</string>
+    <string name="heavy_rain">Mưa to</string>
+    <string name="tuesday">Thứ 3</string>
+    <string name="wednesday">Thứ 4</string>
+    <string name="thursday">Thứ 5</string>
+    <string name="friday">Thứ 6</string>
+    <string name="saturday">Thứ 7</string>
+    <string name="sunday">Chủ nhât</string>
+    <string name="hanoi">Thời tiết USTH</string>
 </resources>
