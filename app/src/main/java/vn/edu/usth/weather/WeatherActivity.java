@@ -13,6 +13,9 @@ import androidx.viewpager.widget.PagerAdapter;
 import androidx.viewpager.widget.ViewPager;
 import androidx.viewpager2.widget.ViewPager2;
 
+import com.google.android.material.tabs.TabLayout;
+import com.google.android.material.tabs.TabLayoutMediator;
+
 public class WeatherActivity extends AppCompatActivity {
 
     @Override
@@ -27,6 +30,8 @@ public class WeatherActivity extends AppCompatActivity {
         HomeFragmentPagerAdapter adapter = new HomeFragmentPagerAdapter(this);
 
         pager.setAdapter(adapter);
+        TabLayout tabLayout = (TabLayout) findViewById(R.id.tab_layout);
+        new TabLayoutMediator(tabLayout, pager, (tab, position) -> tab.setText(adapter.getPageTitle(position))).attach();
 
 
 //        getSupportFragmentManager().beginTransaction()
@@ -79,6 +84,7 @@ public class WeatherActivity extends AppCompatActivity {
 
         Log.i("Destroy" , "onDestroy called");
     }
+
 
 
 }
