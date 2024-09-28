@@ -33,7 +33,7 @@
                     android:layout_height="match_parent"
                     android:layout_weight="1"
                     android:paddingVertical="15dp"
-                    android:text="Monday"
+                    android:text="@string/monday"
                     android:textAlignment="center" />
 
                 <ImageView
@@ -81,7 +81,7 @@
                     android:layout_height="match_parent"
                     android:layout_weight="1"
                     android:paddingVertical="15dp"
-                    android:text="Monday"
+                    android:text="@string/tuesday"
                     android:textAlignment="center" />
 
                 <ImageView
@@ -128,7 +128,7 @@
                     android:layout_height="match_parent"
                     android:layout_weight="1"
                     android:paddingVertical="15dp"
-                    android:text="Monday"
+                    android:text="@string/wednesday"
                     android:textAlignment="center" />
 
                 <ImageView
@@ -175,7 +175,7 @@
                     android:layout_height="match_parent"
                     android:layout_weight="1"
                     android:paddingVertical="15dp"
-                    android:text="Monday"
+                    android:text="@string/thursday"
                     android:textAlignment="center" />
 
                 <ImageView
@@ -222,7 +222,7 @@
                     android:layout_height="match_parent"
                     android:layout_weight="1"
                     android:paddingVertical="15dp"
-                    android:text="Monday"
+                    android:text="@string/friday"
                     android:textAlignment="center" />
 
                 <ImageView
@@ -269,7 +269,7 @@
                     android:layout_height="match_parent"
                     android:layout_weight="1"
                     android:paddingVertical="15dp"
-                    android:text="Monday"
+                    android:text="@string/saturday"
                     android:textAlignment="center" />
 
                 <ImageView
@@ -316,7 +316,7 @@
                     android:layout_height="match_parent"
                     android:layout_weight="1"
                     android:paddingVertical="15dp"
-                    android:text="Monday"
+                    android:text="@string/sunday"
                     android:textAlignment="center" />
 
                 <ImageView
