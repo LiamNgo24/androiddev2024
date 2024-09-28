@@ -2,7 +2,6 @@
 
     <!-- Strings used for fragments for navigation -->
 
-
     <string name="lorem_ipsum">
         Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam in scelerisque sem. Mauris
         volutpat, dolor id interdum ullamcorper, risus dolor egestas lectus, sit amet mattis purus
@@ -38,6 +37,7 @@
         sodales. Praesent bibendum rhoncus tellus nec feugiat. In a ornare nulla. Donec rhoncus
         libero vel nunc consequat, quis tincidunt nisl eleifend. Cras bibendum enim a justo luctus
         vestibulum. Fusce dictum libero quis erat maximus, vitae volutpat diam dignissim.
+
     </string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
@@ -51,7 +51,6 @@
     <string name="previous">Quay lại</string>
     <string name="hanoi_vietnam">Hà Nội, Việt Nam</string>
     <string name="usth_weather">Thời tiết USTH</string>
-    <string name="monday">Thứ 2</string>
     <string name="partly_cloudy">Hơi mây</string>
     <string name="temp">Nhiệt dộ</string>
     <string name="mostly_cloudy">Nhiều mây</string>
@@ -59,11 +58,12 @@
     <string name="windy">Có gió</string>
     <string name="raining">Mưa</string>
     <string name="heavy_rain">Mưa to</string>
-    <string name="tuesday">Thứ 3</string>
-    <string name="wednesday">Thứ 4</string>
-    <string name="thursday">Thứ 5</string>
-    <string name="friday">Thứ 6</string>
-    <string name="saturday">Thứ 7</string>
-    <string name="sunday">Chủ nhât</string>
+    <string name="monday">Thứ Hai</string>
+    <string name="tuesday">Thứ Ba</string>
+    <string name="wednesday">Thứ Tư</string>
+    <string name="thursday">Thứ Năm</string>
+    <string name="friday">Thứ Sáu</string>
+    <string name="saturday">Thứ Bảy</string>
+    <string name="sunday">Chủ Nhât</string>
     <string name="hanoi">Thời tiết USTH</string>
 </resources>
