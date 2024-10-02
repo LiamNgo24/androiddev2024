@@ -70,24 +70,33 @@ public class WeatherActivity extends AppCompatActivity {
     // handle action bar item clicks
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Get the ID of the clicked menu item
         int id = item.getItemId();
 
-        // Use switch-case to handle different menu items
         switch (id) {
             case R.id.action_refresh:
-                // Show toast when refresh button is clicked
-                Toast.makeText(this, "Refresh clicked", Toast.LENGTH_SHORT).show();
+                new Thread(() -> {
+                    try {
+                        runOnUiThread(() -> Toast.makeText(this, "Refreshing", Toast.LENGTH_SHORT).show());
+
+                        // simulate network delay
+                        Thread.sleep(3000);
+
+                        runOnUiThread(() -> Toast.makeText(this, "Refresh complete", Toast.LENGTH_SHORT).show());
+
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+
+                }).start();
                 return true;
 
             case R.id.action_settings:
-                // Start PrefActivity when settings button is clicked
                 Intent intent = new Intent(this, PrefActivity.class);
                 startActivity(intent);
                 return true;
 
             default:
-                // Let the superclass handle any other menu items
+                // let the superclass handle any other menu items
                 return super.onOptionsItemSelected(item);
         }
     }
