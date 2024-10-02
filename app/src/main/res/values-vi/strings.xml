@@ -66,4 +66,6 @@
     <string name="saturday">Thứ Bảy</string>
     <string name="sunday">Chủ Nhât</string>
     <string name="hanoi">Hà Nội</string>
+    <string name="refresh">Refresh</string>
+    <string name="settings">Cài đặt</string>
 </resources>

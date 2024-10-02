@@ -3,7 +3,9 @@ package vn.edu.usth.weather;
 import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.MenuItem;
 import android.widget.LinearLayout;
+//import android.widget.Toolbar;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -14,8 +16,12 @@ import androidx.viewpager2.widget.ViewPager2;
 
 import com.google.android.material.tabs.TabLayout;
 import com.google.android.material.tabs.TabLayoutMediator;
+import android.view.Menu;
+import android.widget.Toast;
 
-import java.io.File;
+import androidx.appcompat.widget.Toolbar;
+
+
 
 public class WeatherActivity extends AppCompatActivity {
 
@@ -27,6 +33,12 @@ public class WeatherActivity extends AppCompatActivity {
         EdgeToEdge.enable(this);
 
         setContentView(R.layout.activity_weather);
+
+
+        // set up toolbar
+        Toolbar toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+
 
         ViewPager2 pager = findViewById(R.id.pager);
         pager.setOffscreenPageLimit(3);
@@ -47,17 +59,32 @@ public class WeatherActivity extends AppCompatActivity {
         playAudio();
     }
 
+    // inflate toolbar
     @Override
-    public void onStart() {
-        super.onStart();
-        Log.i("start", "onStart called");
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_main, menu);
+        return true;
+    }
+
+    // handle action bar item clicks
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+        // Check if the refresh button was clicked
+        if (id == R.id.action_refresh) {
+            // shows toast
+            Toast.makeText(this, "Refresh clicked", Toast.LENGTH_SHORT).show();
+
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     @Override
     public void onPause() {
         super.onPause();
         Log.i("pause", "onPause called");
-        // Pause the media player if it's playing
+        // pause the media player if it's playing
         if (mediaPlayer != null && mediaPlayer.isPlaying()) {
             mediaPlayer.pause();
         }
@@ -67,36 +94,30 @@ public class WeatherActivity extends AppCompatActivity {
     public void onResume() {
         super.onResume();
         Log.i("resume", "onResume called");
-        // Resume the media player if it was paused
+        // resume the media player if it was paused
         if (mediaPlayer != null && !mediaPlayer.isPlaying()) {
             mediaPlayer.start();
         }
     }
 
-    @Override
-    public void onStop() {
-        super.onStop();
-        Log.i("stop", "onStop called");
-    }
+
 
     @Override
     public void onDestroy() {
         super.onDestroy();
         Log.i("Destroy", "onDestroy called");
-        // Release the media player resources
+        // release the media player resources
         if (mediaPlayer != null) {
             mediaPlayer.release();
             mediaPlayer = null;
         }
     }
 
-    // Method to initialize and play an audio file with looping
     private void playAudio() {
-        // Initialize the media player with an MP3 file from the raw folder
-        mediaPlayer = MediaPlayer.create(this, R.raw.sample); // Replace 'your_audio' with the name of your file
+        mediaPlayer = MediaPlayer.create(this, R.raw.sample);
         if (mediaPlayer != null) {
-            mediaPlayer.setLooping(true); // Enable looping
-            mediaPlayer.start(); // Start playing the audio automatically
+            mediaPlayer.setLooping(true);
+            mediaPlayer.start(); // plays audio automatically
             Log.i("MediaPlayer", "Audio started and looping enabled");
         } else {
             Log.e("MediaPlayer", "Failed to initialize MediaPlayer");
