@@ -4,6 +4,9 @@ import android.content.Intent;
 import android.media.MediaPlayer;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
+import android.os.Message;
 import android.util.Log;
 import android.view.MenuItem;
 import android.widget.LinearLayout;
@@ -68,41 +71,13 @@ public class WeatherActivity extends AppCompatActivity {
         return true;
     }
 
-//    // handle action bar item clicks
-//    @Override
-//    public boolean onOptionsItemSelected(MenuItem item) {
-//        int id = item.getItemId();
-//
-//        switch (id) {
-//            case R.id.action_refresh:
-//                new Thread(() -> {
-//                    try {
-//                        runOnUiThread(() -> Toast.makeText(this, "Refreshing", Toast.LENGTH_SHORT).show());
-//
-//                        // simulate network delay
-//                        Thread.sleep(3000);
-//
-//                        runOnUiThread(() -> Toast.makeText(this, "Refresh complete", Toast.LENGTH_SHORT).show());
-//
-//                    } catch (InterruptedException e) {
-//                        e.printStackTrace();
-//                    }
-//
-//                }).start();
-//                return true;
-//
-//            case R.id.action_settings:
-//                Intent intent = new Intent(this, PrefActivity.class);
-//                startActivity(intent);
-//                return true;
-//
-//            default:
-//                // let the superclass handle any other menu items
-//                return super.onOptionsItemSelected(item);
-//        }
-//    }
 
-    private class RefreshTask extends AsyncTask<Void, Void, Void> {
+    // async class
+    private class RefreshTask extends AsyncTask<Void, Void, String> {
+        private final Handler handler;
+        public RefreshTask(Handler handler) {
+            this.handler = handler;
+        }
 
         @Override
         protected void onPreExecute() {
@@ -110,21 +85,39 @@ public class WeatherActivity extends AppCompatActivity {
         }
 
         @Override
-        protected Void doInBackground(Void... voids) {
+        protected String doInBackground(Void... voids) {
             try {
-                // simulate network delay
+                // Simulate network delay
                 Thread.sleep(3000);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
-            return null;
+
+            return "Sample server response: {\"data\":\"some mock data\"}"; // fake response
         }
 
         @Override
-        protected void onPostExecute(Void result) {
-            Toast.makeText(WeatherActivity.this, "Refresh complete", Toast.LENGTH_SHORT).show();
+        protected void onPostExecute(String result) {
+            Bundle bundle = new Bundle();
+            bundle.putString("server_response", result);
+
+            Message msg = new Message(); // create message
+            msg.setData(bundle); // attach to bundle
+
+            handler.sendMessage(msg); // send msg to handler
         }
     }
+
+    // handler to process response
+    private final Handler handler = new Handler(Looper.getMainLooper()) {
+        @Override
+        public void handleMessage(Message msg) {
+            Bundle bundle = msg.getData();
+            String serverResponse = bundle.getString("server_response");
+
+            Toast.makeText(WeatherActivity.this, "Server Response: " + serverResponse, Toast.LENGTH_LONG).show();
+        }
+    };
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -132,7 +125,7 @@ public class WeatherActivity extends AppCompatActivity {
 
         switch (id) {
             case R.id.action_refresh:
-                new RefreshTask().execute();
+                new RefreshTask(handler).execute();
                 return true;
 
             case R.id.action_settings:
