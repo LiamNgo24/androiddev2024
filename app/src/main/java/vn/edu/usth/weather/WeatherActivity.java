@@ -1,5 +1,6 @@
 package vn.edu.usth.weather;
 
+import android.content.Intent;
 import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.util.Log;
@@ -69,15 +70,26 @@ public class WeatherActivity extends AppCompatActivity {
     // handle action bar item clicks
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
+        // Get the ID of the clicked menu item
         int id = item.getItemId();
-        // Check if the refresh button was clicked
-        if (id == R.id.action_refresh) {
-            // shows toast
-            Toast.makeText(this, "Refresh clicked", Toast.LENGTH_SHORT).show();
 
-            return true;
+        // Use switch-case to handle different menu items
+        switch (id) {
+            case R.id.action_refresh:
+                // Show toast when refresh button is clicked
+                Toast.makeText(this, "Refresh clicked", Toast.LENGTH_SHORT).show();
+                return true;
+
+            case R.id.action_settings:
+                // Start PrefActivity when settings button is clicked
+                Intent intent = new Intent(this, PrefActivity.class);
+                startActivity(intent);
+                return true;
+
+            default:
+                // Let the superclass handle any other menu items
+                return super.onOptionsItemSelected(item);
         }
-        return super.onOptionsItemSelected(item);
     }
 
     @Override
