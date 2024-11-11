@@ -27,17 +27,23 @@ import androidx.viewpager2.widget.ViewPager2;
 import com.google.android.material.tabs.TabLayout;
 import com.google.android.material.tabs.TabLayoutMediator;
 
-import java.io.InputStream;
-import java.net.HttpURLConnection;
-import java.net.URL;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.ImageRequest;
+import com.android.volley.toolbox.Volley;
+import com.google.android.material.tabs.TabLayout;
+import com.google.android.material.tabs.TabLayoutMediator;
 
 public class WeatherActivity extends AppCompatActivity {
-
+    private RequestQueue queue;
     private MediaPlayer mediaPlayer;
     private final String imageUrl = "https://usth.edu.vn/wp-content/uploads/2021/11/logo.png"; // Image URL
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        queue = Volley.newRequestQueue(this);
+
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
 
@@ -73,83 +79,32 @@ public class WeatherActivity extends AppCompatActivity {
         return true;
     }
 
-    // async task to download an image
-    private class ImageDownloadTask extends AsyncTask<String, Void, Bitmap> {
-        private final Handler handler;
-
-        public ImageDownloadTask(Handler handler) {
-            this.handler = handler;
-        }
-
-        @Override
-        protected void onPreExecute() {
-            Toast.makeText(WeatherActivity.this, "Downloading image...", Toast.LENGTH_SHORT).show();
-        }
-
-        @Override
-        protected Bitmap doInBackground(String... urls) {
-            String imageUrl = urls[0];
-            Bitmap image = null;
-            InputStream inputStream = null;
-            HttpURLConnection connection = null;
-
-            try {
-                URL url = new URL(imageUrl);
-                connection = (HttpURLConnection) url.openConnection();
-                connection.setDoInput(true);
-                connection.connect();
-
-                inputStream = connection.getInputStream();
-                image = BitmapFactory.decodeStream(inputStream); // decode the image stream into a Bitmap
-            } catch (Exception e) {
-                e.printStackTrace();
-            } finally {
-                if (inputStream != null) {
-                    try {
-                        inputStream.close();
-                    } catch (Exception e) {
-                        e.printStackTrace();
+    private void downloadAndDisplayImage() {
+        ImageRequest imageRequest = new ImageRequest(
+                imageUrl,
+                new Response.Listener<Bitmap>() {
+                    @Override
+                    public void onResponse(Bitmap response) {
+                        ImageView imageView = findViewById(R.id.imageView);
+                        imageView.setImageBitmap(response); // display the downloaded image
+                    }
+                },
+                0, // Max width (0 = auto)
+                0, // Max height (0 = auto)
+                ImageView.ScaleType.CENTER, // Scale type
+                Bitmap.Config.ARGB_8888, // Bitmap config
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        Toast.makeText(WeatherActivity.this, "Failed to download image", Toast.LENGTH_SHORT).show();
                     }
                 }
-                if (connection != null) {
-                    connection.disconnect();
-                }
-            }
+        );
 
-            return image; // return the downloaded Bitmap
-        }
-
-        @Override
-        protected void onPostExecute(Bitmap result) {
-            if (result != null) {
-                // pass the bitmap to the handler
-                Bundle bundle = new Bundle();
-                bundle.putParcelable("server_response", result);
-
-                Message msg = new Message();
-                msg.setData(bundle);
-
-                handler.sendMessage(msg);
-            } else {
-                Toast.makeText(WeatherActivity.this, "Failed to download image", Toast.LENGTH_SHORT).show();
-            }
-        }
+        // add the request to the RequestQueue
+        queue.add(imageRequest);
     }
 
-    // handler to process the downloaded image and set it in the ImageView
-    private final Handler handler = new Handler(Looper.getMainLooper()) {
-        @Override
-        public void handleMessage(Message msg) {
-            Bitmap bitmap = msg.getData().getParcelable("server_response");
-
-            if (bitmap != null) {
-                ImageView imageView = findViewById(R.id.imageView); // applies to imageView id
-                imageView.setImageBitmap(bitmap); // display the downloaded image
-            } else {
-                Toast.makeText(WeatherActivity.this, "No image to display", Toast.LENGTH_LONG).show();
-            }
-        }
-    };
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -157,7 +112,7 @@ public class WeatherActivity extends AppCompatActivity {
 
         switch (id) {
             case R.id.action_refresh:
-                new ImageDownloadTask(handler).execute(imageUrl); // start image download task with URL
+                downloadAndDisplayImage(); // start image download task with URL
                 return true;
 
             case R.id.action_settings:
@@ -169,6 +124,7 @@ public class WeatherActivity extends AppCompatActivity {
                 return super.onOptionsItemSelected(item);
         }
     }
+
 
     @Override
     public void onPause() {
