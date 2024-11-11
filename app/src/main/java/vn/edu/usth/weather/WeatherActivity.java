@@ -1,6 +1,8 @@
 package vn.edu.usth.weather;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.media.MediaPlayer;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -8,12 +10,15 @@ import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
 import android.util.Log;
+import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
-//import android.widget.Toolbar;
+import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
@@ -21,16 +26,15 @@ import androidx.viewpager2.widget.ViewPager2;
 
 import com.google.android.material.tabs.TabLayout;
 import com.google.android.material.tabs.TabLayoutMediator;
-import android.view.Menu;
-import android.widget.Toast;
 
-import androidx.appcompat.widget.Toolbar;
-
-
+import java.io.InputStream;
+import java.net.HttpURLConnection;
+import java.net.URL;
 
 public class WeatherActivity extends AppCompatActivity {
 
     private MediaPlayer mediaPlayer;
+    private final String imageUrl = "https://usth.edu.vn/wp-content/uploads/2021/11/logo.png"; // Image URL
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,11 +43,9 @@ public class WeatherActivity extends AppCompatActivity {
 
         setContentView(R.layout.activity_weather);
 
-
         // set up toolbar
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-
 
         ViewPager2 pager = findViewById(R.id.pager);
         pager.setOffscreenPageLimit(3);
@@ -71,51 +73,81 @@ public class WeatherActivity extends AppCompatActivity {
         return true;
     }
 
-
-    // async class
-    private class RefreshTask extends AsyncTask<Void, Void, String> {
+    // async task to download an image
+    private class ImageDownloadTask extends AsyncTask<String, Void, Bitmap> {
         private final Handler handler;
-        public RefreshTask(Handler handler) {
+
+        public ImageDownloadTask(Handler handler) {
             this.handler = handler;
         }
 
         @Override
         protected void onPreExecute() {
-            Toast.makeText(WeatherActivity.this, "Refreshing", Toast.LENGTH_SHORT).show();
+            Toast.makeText(WeatherActivity.this, "Downloading image...", Toast.LENGTH_SHORT).show();
         }
 
         @Override
-        protected String doInBackground(Void... voids) {
+        protected Bitmap doInBackground(String... urls) {
+            String imageUrl = urls[0];
+            Bitmap image = null;
+            InputStream inputStream = null;
+            HttpURLConnection connection = null;
+
             try {
-                // Simulate network delay
-                Thread.sleep(3000);
-            } catch (InterruptedException e) {
+                URL url = new URL(imageUrl);
+                connection = (HttpURLConnection) url.openConnection();
+                connection.setDoInput(true);
+                connection.connect();
+
+                inputStream = connection.getInputStream();
+                image = BitmapFactory.decodeStream(inputStream); // decode the image stream into a Bitmap
+            } catch (Exception e) {
                 e.printStackTrace();
+            } finally {
+                if (inputStream != null) {
+                    try {
+                        inputStream.close();
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
+                if (connection != null) {
+                    connection.disconnect();
+                }
             }
 
-            return "Sample server response: {\"data\":\"some mock data\"}"; // fake response
+            return image; // return the downloaded Bitmap
         }
 
         @Override
-        protected void onPostExecute(String result) {
-            Bundle bundle = new Bundle();
-            bundle.putString("server_response", result);
+        protected void onPostExecute(Bitmap result) {
+            if (result != null) {
+                // pass the bitmap to the handler
+                Bundle bundle = new Bundle();
+                bundle.putParcelable("server_response", result);
 
-            Message msg = new Message(); // create message
-            msg.setData(bundle); // attach to bundle
+                Message msg = new Message();
+                msg.setData(bundle);
 
-            handler.sendMessage(msg); // send msg to handler
+                handler.sendMessage(msg);
+            } else {
+                Toast.makeText(WeatherActivity.this, "Failed to download image", Toast.LENGTH_SHORT).show();
+            }
         }
     }
 
-    // handler to process response
+    // handler to process the downloaded image and set it in the ImageView
     private final Handler handler = new Handler(Looper.getMainLooper()) {
         @Override
         public void handleMessage(Message msg) {
-            Bundle bundle = msg.getData();
-            String serverResponse = bundle.getString("server_response");
+            Bitmap bitmap = msg.getData().getParcelable("server_response");
 
-            Toast.makeText(WeatherActivity.this, "Server Response: " + serverResponse, Toast.LENGTH_LONG).show();
+            if (bitmap != null) {
+                ImageView imageView = findViewById(R.id.imageView); // applies to imageView id
+                imageView.setImageBitmap(bitmap); // display the downloaded image
+            } else {
+                Toast.makeText(WeatherActivity.this, "No image to display", Toast.LENGTH_LONG).show();
+            }
         }
     };
 
@@ -125,7 +157,7 @@ public class WeatherActivity extends AppCompatActivity {
 
         switch (id) {
             case R.id.action_refresh:
-                new RefreshTask(handler).execute();
+                new ImageDownloadTask(handler).execute(imageUrl); // start image download task with URL
                 return true;
 
             case R.id.action_settings:
@@ -137,8 +169,6 @@ public class WeatherActivity extends AppCompatActivity {
                 return super.onOptionsItemSelected(item);
         }
     }
-
-
 
     @Override
     public void onPause() {
@@ -159,8 +189,6 @@ public class WeatherActivity extends AppCompatActivity {
             mediaPlayer.start();
         }
     }
-
-
 
     @Override
     public void onDestroy() {
